@@ -346,7 +346,7 @@ table th {
   background: var(--light-color);
 }
 
-/* Navbar */
+/* NavBar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -401,7 +401,7 @@ table th {
     font-size: 1rem;
   }
 
-  /* Navbar */
+  /* NavBar */
   .navbar {
     display: block;
     text-align: center;
