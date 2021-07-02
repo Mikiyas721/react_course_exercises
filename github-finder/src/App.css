@@ -275,6 +275,8 @@ img {
 .alert-danger {
   background: var(--danger-color);
   color: #fff;
+  padding: 5px;
+  border-radius: 15px;
 }
 
 .btn-success,
@@ -283,6 +285,8 @@ img {
 .alert-success {
   background: var(--success-color);
   color: #fff;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .btn-white,
