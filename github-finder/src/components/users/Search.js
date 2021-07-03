@@ -1,42 +1,37 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React, {useState, useContext} from 'react';
+import GithubContext from "../../context/githubContext";
 
-class Search extends Component {
-    state = {
-        text: ''
-    }
+const Search = (props) => {
+    const context = useContext(GithubContext);
+    const [text, setText] = useState('');
 
-    onSubmit = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
-        this.props.searchUsers(this.state.text);
-        this.setState({text: ''});
+        context.searchUsers(text);
+        setText('');
     }
-    onClear = (e) => {
+    const onClear = (e) => {
         e.preventDefault();
-        this.props.clearUsers();
-        this.setState({text: ''});
+        context.clearUsers();
+        setText('');
     }
 
-    onChanged = (e) => {
-        this.setState({[e.target.name]: e.target.value})
+    const onChanged = (e) => {
+        setText(e.target.value)
     }
 
-    render() {
-        return (
-            <div>
-                <form className="form" onSubmit={this.onSubmit}>
-                    <input type="text" name="text" placeholder="Search ..." value={this.state.text}
-                           onChange={this.onChanged}/>
-                    <input type="submit" value="Search" className="btn btn-dark btn-block"/>
-                </form>
-                {this.props.showClear&&(<button className="btn btn-block btn-light" onClick={this.onClear}>Clear</button>)}
-            </div>
-        );
-    }
-    static propTypes = {
-        searchUsers: PropTypes.func.isRequired,
-        clearUsers: PropTypes.func.isRequired
-    }
+    return (
+        <div>
+            <form className="form" onSubmit={onSubmit}>
+                <input type="text" name="text" placeholder="Search ..." value={text}
+                       onChange={onChanged}/>
+                <input type="submit" value="Search" className="btn btn-dark btn-block"/>
+            </form>
+            {context.users.length > 0 && (
+                <button className="btn btn-block btn-light" onClick={onClear}>Clear</button>)}
+        </div>
+    );
+
+
 }
-
 export default Search;

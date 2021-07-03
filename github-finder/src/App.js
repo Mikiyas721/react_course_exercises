@@ -1,81 +1,50 @@
-import React, {Component, Fragment} from 'react';
+import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import NavBar from "./components/layout/NavBar";
-import Users from "./components/users/Users";
 import User from "./components/users/User";
-import Search from "./components/users/Search";
 import About from "./components/pages/About";
-import axios from "axios";
+import GithubState from "./context/GithubState";
+import Home from "./components/pages/Home";
+import NotFound from "./components/pages/NotFound";
+
 import './App.css';
 
-class App extends Component {
-    state = {
-        user: {},
-        users: [],
-        isLoading: false
-    }
+const App = (props) => {
 
-    async componentDidMount() {
-        this.setState({isLoading: true});
-        const response = await axios.get(`https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-        this.setState({users: response.data, isLoading: false});
-    }
-
-    searchUsers = async (text) => {
-        if (text !== '') {
-            this.setState({isLoading: true});
-            const response = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-            this.setState({users: response.data.items, isLoading: false});
-        }
-    }
-    getUser = async (username) => {
-        this.setState({isLoading: true});
-        const response = await axios.get(`https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-        this.setState({user: response.data, isLoading: false});
-
-    }
-    clearUsers = async () => {
-        this.setState({users: []});
-    }
-
-    render() {
-        return (
+    return (
+        <GithubState>
             <Router>
                 <div className="App">
                     <NavBar title="Github Finder"/>
                     <div className="container">
                         <Switch>
-                            <Route exact path="/" render={props => (<Fragment>
-                                <Search
-                                    searchUsers={this.searchUsers}
-                                    showClear={this.state.users.length > 0}
-                                    clearUsers={this.clearUsers}
-                                />
-                                <Users
-                                    isLoading={this.state.isLoading}
-                                    users={this.state.users}
-                                />
-                            </Fragment>)}
+                            <Route
+                                exact
+                                path="/"
+                                component={Home}
                             />
                             <Route
                                 exact
                                 path="/about"
                                 component={About}
                             />
-                            <Route exact path="/user/:login" render={props => (
-                                <User
-                                    {...props}
-                                    getUser={this.getUser}
-                                    user={this.state.user}
-                                    isLoading={this.state.isLoading}
-                                />
-                            )}/>
+                            <Route
+                                exact
+                                path="/user/:login"
+                                render={props => (
+                                    <User
+                                        {...props}
+                                    />
+                                )}/>
+                            <Route
+                                component={NotFound}
+                            />
                         </Switch>
                     </div>
                 </div>
             </Router>
-        );
-    }
+        </GithubState>
+    );
 }
 
 export default App;
