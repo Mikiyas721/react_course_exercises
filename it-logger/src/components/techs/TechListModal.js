@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import TechItem from "./TechItem";
-import Preloader from "../layout/Preloader";
 
 const TechListModal = () => {
     const [techs, setTechs] = useState([]);
